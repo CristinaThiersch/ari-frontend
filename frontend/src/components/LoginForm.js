@@ -1,3 +1,4 @@
+import { Cookie } from 'phosphor-react';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -21,7 +22,10 @@ function LoginForm() {
       }
 
       const data = await response.json();
+
       localStorage.setItem('token', data.token);
+      
+      localStorage.setItem('user', data.id);
       navigate('/users'); // Redireciona para a página de usuários
     } catch (error) {
       setError('Credenciais inválidas');

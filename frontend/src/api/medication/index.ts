@@ -8,7 +8,6 @@ export interface ICreateMedication {
   name: string;
   functionMed: string;
   dosage: string;
-  status: boolean;
 }
 
 export const MedicationApi = {
@@ -22,7 +21,12 @@ export const MedicationApi = {
     return data;
   },
   async getMedications() {
-    const { data } = await axios.get('/medications-user/',);
+    const userId = localStorage.getItem("user");
+    const { data } = await axios.get(`/medications-user/${userId}`);
+    return data;
+  },
+  async getAllMedications() {
+    const { data } = await axios.get('/medications');
     return data;
   },
 };

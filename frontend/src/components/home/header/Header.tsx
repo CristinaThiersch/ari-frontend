@@ -1,6 +1,15 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function Header() {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    
+    navigate("/login"); // Redireciona para a página de login após o logout
+  };
+
   return (
     <header className="bg-secondary fixed w-full top-0 left-0">
       <div className="flex flex-wrap justify-between items-center py-2 max-w-[56.25rem] mx-auto">
@@ -17,16 +26,18 @@ export default function Header() {
               <Link to="/home">Início</Link>
             </li>
             <li>
-              <Link to="/medicamento">Medicamentos</Link> {}
+              <Link to="/medicamento">Medicamentos</Link>
             </li>
             <li>
-              <Link to="/prescricao">Prescrições</Link> {}
+              <Link to="/prescricao">Prescrições</Link>
             </li>
             <li>
-              <Link to="/historico">Histórico</Link> {}
+              <Link to="/historico">Histórico</Link>
             </li>
             <li>
-              <Link to="/login">Sair</Link> {}
+              <button onClick={handleLogout} className="text-white">
+                Sair
+              </button>
             </li>
           </ul>
         </nav>

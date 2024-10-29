@@ -11,16 +11,24 @@ export function useGetMedicationById(payload: IGetMedicationById) {
 
 // Hook para cadastrar novo medicamento
 export function useCreateMedication() {
-  return useMutation({
+  return useMutation<ICreateMedication, Error, ICreateMedication>({
     mutationFn: (payload: ICreateMedication) => MedicationApi.createMedication(payload),
   });
 }
 
-// Hook para buscar todos os medicamentos
+// Hook para buscar todos os medicamentos por usuário
 export function useGetMedication() {
     return useQuery({
       queryKey: ['medications'],
       queryFn: MedicationApi.getMedications,
     });
   }
+
+  // Hook para buscar todos os medicamentos
+export function useGetAllMedication() {
+  return useQuery({
+    queryKey: ['medications'],
+    queryFn: MedicationApi.getAllMedications,
+  });
+}
   

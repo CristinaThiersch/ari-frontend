@@ -36,8 +36,9 @@ export default function Login() {
 
     try {
       const result = await handleLogin({ email, password });
-
+      localStorage.setItem("user", result.id);
       setToken(result.token);
+      
       navigate('/home');
     } catch (error) {
       if ((error as AxiosError)?.response?.status === 401) {
