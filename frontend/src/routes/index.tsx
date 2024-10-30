@@ -8,8 +8,6 @@ import { useAuth } from '../providers/auth-provider/hook';
 import { ProtectedRoute } from './ProtectedRoute';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { LoginPage } from '../pages/login';
-import MedicationsFormPage from '../components/medication/MedicationForm';
-import PrescriptionFormPage from '../components/prescription/PrescriptionForm';
 
 const Routes = () => {
   const { token } = useAuth();
@@ -39,16 +37,8 @@ const Routes = () => {
           element: <MedicationPage />,
         },
         {
-          path: '/medicamento/cadastrar',
-          element: <MedicationsFormPage />, // Adiciona a rota para o formulário
-        },
-        {
           path: '/prescricao',
           element: <PrescriptionPage />,
-        },
-        {
-          path: '/prescricao/cadastrar',
-          element: <PrescriptionFormPage />, // Adiciona a rota para o formulário
         },
         {
           path: '/historico',
