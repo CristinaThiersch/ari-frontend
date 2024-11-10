@@ -47,7 +47,7 @@ export default function PrescriptionModal({ isOpen, onClose, selectedPrescriptio
       };
   
       if (selectedPrescription) {
-        await onUpdate({ ...payload, prescriptionId: selectedPrescription.prescriptionId });
+        await onUpdate({ ...payload, id: selectedPrescription.id });
       } else {
         await onCreate(payload);
       }

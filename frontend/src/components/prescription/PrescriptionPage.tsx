@@ -4,7 +4,7 @@ import { useGetPrescriptions, useDeletePrescription, useCreatePrescription, useU
 import { useGetAllMedication } from '../../api/medication/hooks';
 import HomeSection from '../commons/HomeSection';
 import PrescriptionModal from './PrescriptionModal';
-import { IUpdatePrescription } from '../../api/prescription/index';
+import { IUpdatePrescription, PrescriptionApi } from '../../api/prescription/index';
 
 export default function PrescriptionsHomePage() {
   const queryClient = useQueryClient();
@@ -27,17 +27,15 @@ export default function PrescriptionsHomePage() {
     return acc;
   }, {} as Record<number, string>);
 
-  const handleDelete = (prescriptionId: number) => {
-    setSelectedPrescription({ prescriptionId } as IUpdatePrescription);
+  const handleDelete = (id: number) => {
+    setSelectedPrescription({ id } as IUpdatePrescription);
     setIsConfirmDeleteOpen(true);
   };
 
   const confirmDelete = async () => {
     if (selectedPrescription) {
       try {
-        console.log('Deleting prescription with ID:', selectedPrescription.prescriptionId);
-        const result = await deletePrescription.mutateAsync({ prescriptionId: selectedPrescription.prescriptionId });
-        console.log('Delete result:', result);
+        await deletePrescription.mutateAsync({ id: selectedPrescription.id });
         queryClient.invalidateQueries(['prescriptions']);
         setIsConfirmDeleteOpen(false);
       } catch (error) {
@@ -71,7 +69,6 @@ export default function PrescriptionsHomePage() {
 
   const handleUpdate = async (data: IUpdatePrescription) => {
     try {
-      console.log(data)
       await updatePrescription.mutateAsync(data);
       queryClient.invalidateQueries(['prescriptions']);
       setIsModalOpen(false);
@@ -81,14 +78,14 @@ export default function PrescriptionsHomePage() {
   };
 
   return (
-    <HomeSection sectionClassName="bg-secondary mt-[5.75rem]" id="prescricao">
+    <HomeSection sectionClassName="bg-white mt-[5.75rem]" id="prescricao">
       <div>
         <h1 className="text-2xl font-bold mb-4">Prescrições</h1>
         {!prescriptions || prescriptions.length === 0 ? (
           <p>Você ainda não possui prescrições cadastradas!</p>
         ) : (
           prescriptions.map((prescription) => (
-            <div key={prescription.id} className="card bg-white shadow-md rounded-lg p-4 mb-4">
+            <div key={prescription.id} className="card bg-quaternary shadow-md rounded-lg p-4 mb-4">
               <h2 className="text-xl font-semibold">Medicação: {medicationMap[prescription.medicationId] || 'Nome não disponível'}</h2>
               <p>Frequência: {prescription.frequency} vezes ao dia</p>
               <p>Observação: {prescription.observation || "Nenhuma"}</p>

@@ -1,7 +1,7 @@
 import axios from '../api';
 
 export interface IGetPrescriptionById {
-  prescriptionId: number;
+  id: number;
 }
 
 export interface ICreatePrescription {
@@ -15,13 +15,13 @@ export interface ICreatePrescription {
 
 // Para atualizar uma prescrição
 export interface IUpdatePrescription extends ICreatePrescription {
-  prescriptionId: number; // Incluindo o ID da prescrição a ser atualizada
+  id: number; // Incluindo o ID da prescrição a ser atualizada
 }
 
 export const PrescriptionApi = {
   async getPrescriptionById(payload: IGetPrescriptionById) {
-    const { prescriptionId } = payload;
-    const { data } = await axios.get(`/prescription/${prescriptionId}`);
+    const { id } = payload;
+    const { data } = await axios.get(`/prescription/${id}`);
     return data;
   },
   async createPrescription(payload: ICreatePrescription) {
@@ -34,15 +34,14 @@ export const PrescriptionApi = {
     return data;
   },
   async putPrescription(payload: IUpdatePrescription) {
-    console.log(payload)
-    const { prescriptionId, ...updateData } = payload; // Separar prescriptionId dos outros dados
-    const { data } = await axios.put(`/prescription/${prescriptionId}`, updateData); // Enviar apenas os dados a serem atualizados
+    const { id, ...updateData } = payload; // Separar prescriptionId dos outros dados
+    const { data } = await axios.put(`/prescription/${id}`, updateData); // Enviar apenas os dados a serem atualizados
     console.log(data)
     return data;
   },
   async deletePrescription(payload: IGetPrescriptionById) {
-    const { prescriptionId } = payload;
-    const { data } = await axios.delete(`/prescription/${prescriptionId}`);
+    const { id } = payload;
+    const { data } = await axios.delete(`/prescription/${id}`);
     return data;
   },
 };

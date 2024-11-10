@@ -1,7 +1,7 @@
 import axios from '../api';
 
 export interface IGetMedicationById {
-  medicationId: number;
+  id: number;
 }
 
 export interface ICreateMedication {
@@ -12,25 +12,30 @@ export interface ICreateMedication {
 
 export const MedicationApi = {
   async getMedicationById(payload: IGetMedicationById) {
-    const { medicationId } = payload;
-    const { data } = await axios.get(`/medication/${medicationId}`);
+    const { id } = payload;
+    const { data } = await axios.get(`/medication/${id}`);
     return data;
   },
   async createMedication(payload: ICreateMedication) {
     const { data } = await axios.post('/medication', payload);
     return data;
   },
-  async getMedications() {
-    const { data } = await axios.get('/medications');
+  async getMedicationsByUser() {
+    const userId = localStorage.getItem("user");
+    const { data } = await axios.get(`/medications-user/${userId}`);
     return data;
   },
   async getAllMedications() {
     const { data } = await axios.get('/medications');
     return data;
   },
+  async updateMedication(medicationId: number, payload: ICreateMedication) {
+    const { data } = await axios.put(`/medication/${medicationId}`, payload);
+    return data;
+  },
   async deleteMedication(payload: IGetMedicationById) {
-    const { medicationId } = payload;
-    const { data } = await axios.delete(`/medication/${medicationId}`);
+    const { id } = payload;
+    const { data } = await axios.delete(`/medication/${id}`);
     return data;
   },
 };

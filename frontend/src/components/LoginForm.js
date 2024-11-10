@@ -11,16 +11,14 @@ function LoginForm() {
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
-    console.log("Entrei no logout");
   };
 
   // Verifique se o token existe, e se existir, faça o logout
   useEffect(() => {
     const token = localStorage.getItem("token");
-    console.log("OPa");
-    
-    handleLogout(); // Se houver token, faz logout
-    
+    if (token) { // Only handle logout if there's a token
+      handleLogout();
+    }
   }, []); // O array vazio faz a verificação acontecer apenas uma vez, ao carregar o componente
 
   const handleSubmit = async (e) => {

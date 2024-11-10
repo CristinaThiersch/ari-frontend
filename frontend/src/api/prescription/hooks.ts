@@ -4,7 +4,7 @@ import { PrescriptionApi, IGetPrescriptionById, ICreatePrescription, IUpdatePres
 // Hook para buscar prescrição pelo ID
 export function useGetPrescriptionById(payload: IGetPrescriptionById) {
   return useQuery({
-    queryKey: ['prescription', payload.prescriptionId],
+    queryKey: ['prescription', payload.id],
     queryFn: () => PrescriptionApi.getPrescriptionById(payload),
   });
 }

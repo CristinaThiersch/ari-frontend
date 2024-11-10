@@ -4,7 +4,7 @@ import { MedicationApi, IGetMedicationById, ICreateMedication } from './index';
 // Hook para buscar medicamento pelo ID
 export function useGetMedicationById(payload: IGetMedicationById) {
   return useQuery({
-    queryKey: ['medication', payload.medicationId],
+    queryKey: ['medication', payload.id],
     queryFn: () => MedicationApi.getMedicationById(payload),
   });
 }
@@ -17,10 +17,10 @@ export function useCreateMedication() {
 }
 
 // Hook para buscar todos os medicamentos por usuário
-export function useGetMedication() {
+export function useGetMedicationsByUser() {
     return useQuery({
       queryKey: ['medications'],
-      queryFn: MedicationApi.getMedications,
+      queryFn: MedicationApi.getMedicationsByUser,
     });
   }
 
@@ -39,3 +39,8 @@ export function useDeleteMedication() {
   });
 }
   
+export function useUpdateMedication() {
+  return useMutation<void, Error, { medicationId: number; data: ICreateMedication }>({
+    mutationFn: ({ medicationId, data }) => MedicationApi.updateMedication(medicationId, data),
+  });
+}

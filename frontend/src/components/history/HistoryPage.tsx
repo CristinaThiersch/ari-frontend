@@ -31,7 +31,7 @@ export default function HistoriesHomePage() {
   };
 
   return (
-    <HomeSection sectionClassName="bg-secondary mt-[5.75rem]" id="historico">
+    <HomeSection sectionClassName="bg-white mt-[5.75rem]" id="historico">
       <div className="p-4">
         <h1 className="text-2xl font-semibold mb-4">Histórico de Prescrições</h1>
         <div className="bg-gray-100 text-tertiary font-bold rounded-lg p-6 w-full mb-4">
@@ -42,10 +42,10 @@ export default function HistoriesHomePage() {
           <p>Ainda não há histórico de prescrições no sistema.</p>
         ) : (
           histories.map((history) => (
-            <div key={history.id} className="card bg-white shadow-md rounded-lg p-4 mb-4">
+            <div key={history.id} className="card bg-quaternary shadow-md rounded-lg p-4 mb-4">
               <h2 className="text-xl font-semibold">Prescrição: {history.prescriptionId}</h2>
               <p>Data: {new Date(history.currentDate).toLocaleDateString()}</p>
-              <p>Status: {history.status ? 'Ativo' : 'Inativo'}</p>
+              <p>Status: {history.prescription.status ? 'Ativo' : 'Inativo'}</p>
               <h3 className="text-lg font-semibold mt-2">Detalhes da Medicação</h3>
               <p>Nome: {history.prescription.medication.name}</p>
               <p>Função: {history.prescription.medication.functionMed}</p>

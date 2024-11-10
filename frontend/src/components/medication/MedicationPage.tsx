@@ -1,20 +1,30 @@
 import { useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import { useGetMedication, useDeleteMedication, useCreateMedication } from '../../api/medication/hooks';
+import { useGetAllMedication, useDeleteMedication, useCreateMedication, useUpdateMedication } from '../../api/medication/hooks';
 import HomeSection from '../commons/HomeSection';
 import MedicationModal from './MedicationModal';
 
 export default function MedicationsHomePage() {
   const queryClient = useQueryClient();
-  const { data: medications, isLoading, error } = useGetMedication();
+  const { data: medications, isLoading, error } = useGetAllMedication();
   const deleteMedication = useDeleteMedication();
   const createMedication = useCreateMedication();
+  const updateMedication = useUpdateMedication();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isConfirmDeleteOpen, setIsConfirmDeleteOpen] = useState(false);
   const [selectedMedicationId, setSelectedMedicationId] = useState<number | null>(null);
+  const [medicationToEdit, setMedicationToEdit] = useState<ICreateMedication | null>(null);
 
-  const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
+  const openModal = (medication?: ICreateMedication, id?: number) => {
+    setMedicationToEdit(medication || null);
+    setSelectedMedicationId(id || null);
+    setIsModalOpen(true);
+  };
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setMedicationToEdit(null);
+    setSelectedMedicationId(null);
+  };
 
   if (isLoading) return <p>Carregando...</p>;
   if (error) return <p>Erro ao carregar medicações: {error.message}</p>;
@@ -27,7 +37,7 @@ export default function MedicationsHomePage() {
   const confirmDelete = async () => {
     if (selectedMedicationId !== null) {
       try {
-        await deleteMedication.mutateAsync({ medicationId: selectedMedicationId });
+        await deleteMedication.mutateAsync({ id: selectedMedicationId });
         queryClient.invalidateQueries(['medications']);
         setIsConfirmDeleteOpen(false);
       } catch (error) {
@@ -36,19 +46,28 @@ export default function MedicationsHomePage() {
     }
   };
 
-  // Função para criar medicação e atualizar a lista
-  const handleCreate = async (data: any) => {
+  const handleCreate = async (data: ICreateMedication) => {
     try {
       await createMedication.mutateAsync(data);
-      queryClient.invalidateQueries(['medications']); // Invalida a consulta para atualizar a lista
-      setIsModalOpen(false); // Fecha o modal após a criação
+      queryClient.invalidateQueries(['medications']);
+      setIsModalOpen(false);
     } catch (error) {
       console.error('Erro ao criar medicação:', error);
     }
   };
 
+  const handleUpdate = async (id: number, data: ICreateMedication) => {
+    try {
+      await updateMedication.mutateAsync({ medicationId: id, data });
+      queryClient.invalidateQueries(['medications']);
+      setIsModalOpen(false);
+    } catch (error) {
+      console.error('Erro ao atualizar medicação:', error);
+    }
+  };
+
   return (
-    <HomeSection sectionClassName="bg-secondary mt-[5.75rem]" id="medicamento">
+    <HomeSection sectionClassName="bg-white mt-[5.75rem]" id="medicamento">
       <div className="p-4">
         <h1 className="text-2xl font-semibold mb-4">Medicações</h1>
         <div className="bg-gray-100 text-tertiary font-bold rounded-lg p-6 w-full mb-4">
@@ -60,13 +79,19 @@ export default function MedicationsHomePage() {
           <p>Ainda não há medicamentos cadastrados no sistema! Ajude cadastrando os medicamentos que você toma.</p>
         ) : (
           medications.map((medication) => (
-            <div key={medication.id} className="card bg-white shadow-md rounded-lg p-4 mb-4">
+            <div key={medication.id} className="card bg-quaternary shadow-md rounded-lg p-4 mb-4">
               <h2 className="text-xl font-semibold">Nome: {medication.name}</h2>
               <p>Função: {medication.functionMed}</p>
               <p>Dosagem: {medication.dosage}</p>
               <button
+                onClick={() => openModal(medication, medication.id)}
+                className="text-blue-500 hover:text-blue-700 mr-2 hover:font-bold"
+              >
+                Editar
+              </button>
+              <button
                 onClick={() => handleDelete(medication.id)}
-                className="mt-2 text-tertiary hover:text-tertiary font-bold"
+                className="text-tertiary hover:text-tertiary hover:font-bold"
               >
                 Excluir
               </button>
@@ -75,14 +100,21 @@ export default function MedicationsHomePage() {
         )}
 
         <button
-          onClick={openModal}
+          onClick={() => openModal()}
           className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
         >
           Cadastrar Nova Medicação
         </button>
 
-        {/* Modal de Cadastro de Medicação */}
-        <MedicationModal isOpen={isModalOpen} onClose={closeModal} onCreate={handleCreate} />
+        {/* Modal de Cadastro ou Atualização de Medicação */}
+        <MedicationModal 
+          isOpen={isModalOpen} 
+          onClose={closeModal} 
+          onCreate={handleCreate} 
+          onUpdate={handleUpdate} 
+          medication={medicationToEdit}
+          id={selectedMedicationId}
+        />
 
         {/* Modal de Confirmação de Exclusão */}
         {isConfirmDeleteOpen && (
