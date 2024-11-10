@@ -31,4 +31,11 @@ export function useGetAllMedication() {
     queryFn: MedicationApi.getAllMedications,
   });
 }
+
+// Hook para deletar um medicamento
+export function useDeleteMedication() {
+  return useMutation<IGetMedicationById, Error, IGetMedicationById>({
+    mutationFn: (payload: IGetMedicationById) => MedicationApi.deleteMedication(payload),
+  });
+}
   

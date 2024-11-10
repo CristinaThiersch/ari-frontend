@@ -1,16 +1,15 @@
 import { useForm } from 'react-hook-form';
-import { useCreateMedication } from '../../api/medication/hooks';
 import { ICreateMedication } from '../../api/medication';
 import { useEffect } from 'react';
 
 interface MedicationModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onCreate: (data: ICreateMedication) => Promise<void>; // Adiciona a prop onCreate
 }
 
-export default function MedicationModal({ isOpen, onClose }: MedicationModalProps) {
+export default function MedicationModal({ isOpen, onClose, onCreate }: MedicationModalProps) {
   const { register, handleSubmit, formState: { errors }, reset } = useForm<ICreateMedication>();
-  const createMedication = useCreateMedication();
 
   useEffect(() => {
     if (!isOpen) reset();
@@ -18,8 +17,7 @@ export default function MedicationModal({ isOpen, onClose }: MedicationModalProp
 
   const onSubmit = async (data: ICreateMedication) => {
     try {
-      await createMedication.mutateAsync(data);
-      onClose(); // Fecha o modal após o sucesso
+      await onCreate(data); // Chama a função onCreate passada como prop
     } catch (error) {
       console.error('Erro ao criar medicamento:', error);
     }
@@ -40,7 +38,7 @@ export default function MedicationModal({ isOpen, onClose }: MedicationModalProp
               {...register('name', { required: 'Nome é obrigatório' })}
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
             />
-            {errors.name && <span className="text-red-500 text-sm">{errors.name.message}</span>}
+            {errors.name && <span className="text-tertiary text-sm">{errors.name.message}</span>}
           </div>
 
           <div>
@@ -50,7 +48,7 @@ export default function MedicationModal({ isOpen, onClose }: MedicationModalProp
               {...register('functionMed', { required: 'Função é obrigatória' })}
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
             />
-            {errors.functionMed && <span className="text-red-500 text-sm">{errors.functionMed.message}</span>}
+            {errors.functionMed && <span className="text-tertiary text-sm">{errors.functionMed.message}</span>}
           </div>
 
           <div>
@@ -60,7 +58,7 @@ export default function MedicationModal({ isOpen, onClose }: MedicationModalProp
               {...register('dosage', { required: 'Dosagem é obrigatória' })}
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
             />
-            {errors.dosage && <span className="text-red-500 text-sm">{errors.dosage.message}</span>}
+            {errors.dosage && <span className="text-tertiary text-sm">{errors.dosage.message}</span>}
           </div>
 
           <div className="flex justify-end space-x-2">
@@ -73,16 +71,18 @@ export default function MedicationModal({ isOpen, onClose }: MedicationModalProp
             </button>
             <button
               type="submit"
-              disabled={createMedication.isPending}
-              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 disabled:opacity-50"
+              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
             >
-              {createMedication.isPending ? 'Cadastrando...' : 'Cadastrar'}
+              Cadastrar
             </button>
           </div>
 
-          {createMedication.isError && (
-            <span className="block text-red-500 mt-2">Erro ao cadastrar medicamento. Tente novamente.</span>
-          )}
+          {/* Exibir mensagens de erro de criação */}
+          {errors.name || errors.functionMed || errors.dosage ? (
+            <span className="block text-tertiary mt-2">
+              {errors.name?.message} {errors.functionMed?.message} {errors.dosage?.message}
+            </span>
+          ) : null}
         </form>
       </div>
     </div>

@@ -95,10 +95,10 @@ export default function PrescriptionsHomePage() {
               <p>Data de início: {new Date(prescription.startDate).toLocaleDateString()}</p>
               <p>Data de término: {new Date(prescription.endDate).toLocaleDateString()}</p>
               <div className="mt-2">
-                <button onClick={() => handleEdit(prescription as IUpdatePrescription)} className="text-blue-500 hover:text-blue-700 mr-2">
+                <button onClick={() => handleEdit(prescription as IUpdatePrescription)} className="text-blue-500 hover:text-blue-700 mr-2 hover:font-bold">
                   Editar
                 </button>
-                <button onClick={() => handleDelete(prescription.id)} className="text-red-500 hover:text-red-700">
+                <button onClick={() => handleDelete(prescription.id)} className="text-tertiary hover:text-tertiary hover:font-bold">
                   Excluir
                 </button>
               </div>
@@ -141,7 +141,7 @@ export default function PrescriptionsHomePage() {
                 <button
                   type="button"
                   onClick={confirmDelete}
-                  className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 focus:outline-none"
+                  className="px-4 py-2 bg-tertiary text-white rounded hover:bg-green-800 hover:font-bold focus:outline-none"
                 >
                   Excluir
                 </button>

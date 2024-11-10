@@ -1,17 +1,30 @@
 import { z } from 'zod';
 
-const passwordValidation = new RegExp(
-  /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/
-);
+// Funções de validação personalizadas
+const hasUpperCase = (str: string) => /[A-Z]/.test(str);
+const hasLowerCase = (str: string) => /[a-z]/.test(str);
+const hasNumber = (str: string) => /\d/.test(str);
+const hasSpecialChar = (str: string) => /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(str);
 
+// Schema de validação da senha
 const passwordRule = z
-  .string({
-    required_error: 'O campo senha é obrigatório!',
-  })
-  .min(8, { message: 'A senha deve ter no mínimo 8 caracteres!' })
-  .regex(passwordValidation, {
-    message: 'Senha inválida!',
-  });
+    .string({
+        required_error: 'O campo senha é obrigatório!',
+    })
+    .min(8, { message: 'A senha deve ter no mínimo 8 caracteres!' })
+    .refine((password) => hasUpperCase(password), {
+        message: 'A senha deve conter pelo menos uma letra maiúscula.',
+    })
+    .refine((password) => hasLowerCase(password), {
+        message: 'A senha deve conter pelo menos uma letra minúscula.',
+    })
+    .refine((password) => hasNumber(password), {
+        message: 'A senha deve conter pelo menos um número.',
+    })
+    .refine((password) => hasSpecialChar(password), {
+        message: 'A senha deve conter pelo menos um caractere especial.',
+    });
+
 
   export const registerSchema = z
   .object({

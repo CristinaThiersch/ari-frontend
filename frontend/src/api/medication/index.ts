@@ -21,12 +21,16 @@ export const MedicationApi = {
     return data;
   },
   async getMedications() {
-    const userId = localStorage.getItem("user");
-    const { data } = await axios.get(`/medications-user/${userId}`);
+    const { data } = await axios.get('/medications');
     return data;
   },
   async getAllMedications() {
     const { data } = await axios.get('/medications');
+    return data;
+  },
+  async deleteMedication(payload: IGetMedicationById) {
+    const { medicationId } = payload;
+    const { data } = await axios.delete(`/medication/${medicationId}`);
     return data;
   },
 };

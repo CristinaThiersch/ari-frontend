@@ -157,7 +157,7 @@ export default function Register() {
                     type="button"
                     className="rounded-md hover:text-green-300 p-2 text-xs transition-all ease-in-out text-green-400 font-medium absolute inset-y-0 end-1"
                   >
-                    {showPassword ? 'Hide' : 'Show'}
+                    {showPassword ? 'Esconder' : 'Mostrar'}
                   </button>
                 </div>
                 {errors.password?.message && (
@@ -187,7 +187,7 @@ export default function Register() {
                     type="button"
                     className="rounded-md hover:text-green-300 p-2 text-xs transition-all ease-in-out text-green-400 font-medium absolute inset-y-0 end-1"
                   >
-                    {showConfirmPassword ? 'Hide' : 'Show'}
+                    {showConfirmPassword ? 'Esconder' : 'Mostrar'}
                   </button>
                 </div>
                 {errors.confirmPassword?.message && (

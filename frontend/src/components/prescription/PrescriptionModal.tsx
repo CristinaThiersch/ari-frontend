@@ -71,12 +71,12 @@ export default function PrescriptionModal({ isOpen, onClose, selectedPrescriptio
             {isLoadingMedications ? (
               <p>Carregando medicamentos...</p>
             ) : medications?.length === 0 ? (
-              <p className="text-red-500">Nenhum medicamento disponível.</p>
+              <p className="text-tertiary">Nenhum medicamento disponível.</p>
             ) : (
               <select id="medicationId" {...register("medicationId", { required: true })} className="block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50">
                 <option value="">Selecione uma medicação</option>
                 {medications.map((medication) => (
-                  <option key={medication.id} value={medication.id}>{medication.name}</option>
+                  <option key={medication.id} value={medication.id}>{medication.name} - {medication.dosage}</option>
                 ))}
               </select>
             )}

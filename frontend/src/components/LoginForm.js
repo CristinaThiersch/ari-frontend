@@ -1,5 +1,5 @@
 import { Cookie } from 'phosphor-react';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 function LoginForm() {
@@ -7,6 +7,21 @@ function LoginForm() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    console.log("Entrei no logout");
+  };
+
+  // Verifique se o token existe, e se existir, faça o logout
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    console.log("OPa");
+    
+    handleLogout(); // Se houver token, faz logout
+    
+  }, []); // O array vazio faz a verificação acontecer apenas uma vez, ao carregar o componente
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -24,7 +39,6 @@ function LoginForm() {
       const data = await response.json();
 
       localStorage.setItem('token', data.token);
-      
       localStorage.setItem('user', data.id);
       navigate('/users'); // Redireciona para a página de usuários
     } catch (error) {

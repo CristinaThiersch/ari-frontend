@@ -42,7 +42,7 @@ export default function Login() {
       navigate('/home');
     } catch (error) {
       if ((error as AxiosError)?.response?.status === 401) {
-        return setError('email', {
+        return setError('password', {
           type: 'manual',
           message: 'Credenciais inválidas, tente novamente!',
         });
@@ -124,7 +124,7 @@ export default function Login() {
                     type="button"
                     className="rounded-md hover:text-green-300 p-2 text-xs transition-all ease-in-out text-green-400 font-medium absolute inset-y-0 end-1"
                   >
-                    {showPassword ? 'Hide' : 'Show'}
+                    {showPassword ? 'Esconder' : 'Mostrar'}
                   </button>
                 </div>
                 <div className="flex gap-2">
