@@ -21,6 +21,10 @@ const Routes = () => {
       path: '/login',
       element: <LoginPage />,
     },
+    {
+      path: '/password-recovery',
+      element: <PasswordRecovery />,
+    },
   ];
 
   const routesForAuthenticatedOnly = [
@@ -48,24 +52,8 @@ const Routes = () => {
     },
   ];
 
-  const routesForNotAuthenticatedOnly = [
-    // {
-    //   path: '/register',
-    //   element: <RegisterPage />,
-    // },
-    // {
-    //   path: '/login',
-    //   element: <LoginPage />,
-    // },
-    {
-      path: '/password-recovery',
-      element: <PasswordRecovery />,
-    },
-  ];
-
   const router = createBrowserRouter([
     ...routesForPublic,
-    ...(!token ? routesForNotAuthenticatedOnly : []),
     ...routesForAuthenticatedOnly,
   ]);
 
